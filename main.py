@@ -3,5 +3,5 @@
 
 import libs.core as core
 
-game = core.Core(500, 500)
+game = core.Core(1280, 720)
 game.start()

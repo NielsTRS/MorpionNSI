@@ -18,10 +18,13 @@ class Core:
             raise TypeError("La taille de la fenêtre doivent être défini par des nombres")
 
     def start(self):
-        pygame.display.set_mode((self.x, self.y))
+        surf = pygame.display.set_mode((self.x, self.y))
+        image = pygame.image.load(r'./assets/images/main_menu.png')
         run = True
         while run:
+            surf.blit(image, (0, 0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+            pygame.display.update()
         pygame.quit()
