@@ -19,7 +19,12 @@ class Core:
 
     def start(self):
         surf = pygame.display.set_mode((self.x, self.y))
-        image = pygame.image.load(r'./assets/images/main_menu.png')
+        image = pygame.image.load(r'./assets/images/main_menu.png').convert()
+
+        bot_area = pygame.Rect((117, 340), (261, 261))  # left, top, width, height
+        friend_area = pygame.Rect((511, 340), (261, 261))  # left, top, width, height
+        stranger_area = pygame.Rect((905, 340), (261, 261))  # left, top, width, height
+
         run = True
         while run:
             surf.blit(image, (0, 0))
@@ -28,9 +33,12 @@ class Core:
                     run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # clic gauche
-                        print("you vs bot")
-                        # load bot logic
-                        self.bot()
+                        if bot_area.collidepoint(event.pos):
+                            self.bot()
+                        if friend_area.collidepoint(event.pos):
+                            self.friend()
+                        if stranger_area.collidepoint(event.pos):
+                            self.stranger()
 
             pygame.display.update()
         pygame.quit()
