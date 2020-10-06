@@ -26,5 +26,20 @@ class Core:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:  # clic gauche
+                        print("you vs bot")
+                        # load bot logic
+                        self.bot()
+
             pygame.display.update()
         pygame.quit()
+
+    def bot(self):
+        return True
+
+    def friend(self):
+        return True
+
+    def stranger(self):
+        return True
