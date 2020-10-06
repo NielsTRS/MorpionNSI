@@ -24,7 +24,7 @@ class Core:
         bot_area = pygame.Rect((117, 340), (261, 261))  # left, top, width, height
         friend_area = pygame.Rect((511, 340), (261, 261))  # left, top, width, height
         stranger_area = pygame.Rect((905, 340), (261, 261))  # left, top, width, height
-
+        close_area = pygame.Rect((1186, 0), (74, 74))  # left, top, width, height
         run = True
         while run:
             self.surf.blit(image, (0, 0))
@@ -42,7 +42,8 @@ class Core:
                         if stranger_area.collidepoint(event.pos):
                             image = self.__setImage('./assets/images/game_screen.png')
                             self.stranger()
-            self.surf.blit(image, (0, 0))
+                        if close_area.collidepoint(event.pos):
+                            self.start()
             pygame.display.update()
         pygame.quit()
 
