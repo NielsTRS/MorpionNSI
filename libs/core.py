@@ -21,24 +21,42 @@ class Core:
     def start(self):
         background_image = self.__setImage('./assets/images/main_menu.png')
 
-        bot_image = self.__setImage('./assets/images/modes/ia.png')
-        bot_image_rect = bot_image.get_rect()
-        bot_image = pygame.transform.scale(bot_image, (261, 261))
+        bot_image = self.__setImage('./assets/images/modes/bot.png')
+        bot_sizes = {
+            'x': 261,
+            'y': 261,
+            'pos_x': 117,
+            'pos_y': 340
+        }
+        bot_image = pygame.transform.scale(bot_image, (bot_sizes['x'], bot_sizes['y']))
+        bot_image_rect = pygame.rect.Rect.move(bot_image.get_rect(), bot_sizes['pos_x'], bot_sizes['pos_y'])
 
         local_image = self.__setImage('./assets/images/modes/local.png')
-        local_image_rect = local_image.get_rect()
-        local_image = pygame.transform.scale(local_image, (261, 261))
+        local_sizes = {
+            'x': 261,
+            'y': 261,
+            'pos_x': 511,
+            'pos_y': 340
+        }
+        local_image = pygame.transform.scale(local_image, (local_sizes['x'], local_sizes['y']))
+        local_image_rect = pygame.rect.Rect.move(local_image.get_rect(), local_sizes['pos_x'], local_sizes['pos_y'])
 
         online_image = self.__setImage('./assets/images/modes/online.png')
-        online_image_rect = online_image.get_rect()
-        online_image = pygame.transform.scale(online_image, (261, 261))
+        online_sizes = {
+            'x': 261,
+            'y': 261,
+            'pos_x': 905,
+            'pos_y': 340
+        }
+        online_image = pygame.transform.scale(online_image, (online_sizes['x'], online_sizes['y']))
+        online_image_rect = pygame.rect.Rect.move(online_image.get_rect(), online_sizes['pos_x'], online_sizes['pos_y'])
 
         run = True
         while run:
             self.surf.blit(background_image, (0, 0))
-            self.surf.blit(bot_image, (117, 340))
-            self.surf.blit(local_image, (511, 340))
-            self.surf.blit(online_image, (905, 340))
+            self.surf.blit(bot_image, (bot_sizes['pos_x'], bot_sizes['pos_y']))
+            self.surf.blit(local_image, (local_sizes['pos_x'], local_sizes['pos_y']))
+            self.surf.blit(online_image, (online_sizes['pos_x'], online_sizes['pos_y']))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
