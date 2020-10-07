@@ -19,36 +19,45 @@ class Core:
             raise TypeError("Les paramètres doivent être définis par des nombres")
 
     def start(self):
-        image = pygame.image.load(r'./assets/images/main_menu.png').convert()
+        background_image = self.__setImage('./assets/images/main_menu.png')
 
-        bot_area = pygame.Rect((117, 340), (261, 261))  # left, top, width, height
-        friend_area = pygame.Rect((511, 340), (261, 261))  # left, top, width, height
-        stranger_area = pygame.Rect((905, 340), (261, 261))  # left, top, width, height
-        close_area = pygame.Rect((1186, 0), (74, 74))  # left, top, width, height
+        bot_image = self.__setImage('./assets/images/modes/ia.png')
+        bot_image_rect = bot_image.get_rect()
+        bot_image = pygame.transform.scale(bot_image, (261, 261))
+
+        local_image = self.__setImage('./assets/images/modes/local.png')
+        local_image_rect = local_image.get_rect()
+        local_image = pygame.transform.scale(local_image, (261, 261))
+
+        online_image = self.__setImage('./assets/images/modes/online.png')
+        online_image_rect = online_image.get_rect()
+        online_image = pygame.transform.scale(online_image, (261, 261))
+
         run = True
         while run:
-            self.surf.blit(image, (0, 0))
+            self.surf.blit(background_image, (0, 0))
+            self.surf.blit(bot_image, (117, 340))
+            self.surf.blit(local_image, (511, 340))
+            self.surf.blit(online_image, (905, 340))
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # clic gauche
-                        if bot_area.collidepoint(event.pos):
-                            image = self.__setImage('./assets/images/game_screen.png')
-                            self.bot()
-                        if friend_area.collidepoint(event.pos):
-                            image = self.__setImage('./assets/images/game_screen.png')
-                            self.friend()
-                        if stranger_area.collidepoint(event.pos):
-                            image = self.__setImage('./assets/images/game_screen.png')
-                            self.stranger()
-                        if close_area.collidepoint(event.pos):
-                            self.start()
+                        if bot_image_rect.collidepoint(event.pos):
+                            print('bot')
+                        if local_image_rect.collidepoint(event.pos):
+                            print('friend')
+                        if online_image_rect.collidepoint(event.pos):
+                            print('stranger')
+                        # if close_area.collidepoint(event.pos):
+                        #     print('close')
             pygame.display.update()
         pygame.quit()
 
     def __setImage(self, image: str):
-        return pygame.image.load(fr'{image}').convert()
+        return pygame.image.load(fr'{image}').convert_alpha()
 
     def bot(self):
         return True
