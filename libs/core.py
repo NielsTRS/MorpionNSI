@@ -21,24 +21,42 @@ class Core:
     def start(self):
         background_image = self.__setImage('./assets/images/main_menu.png')
 
-        bot_image = self.__setImage('./assets/images/modes/ia.png')
-        bot_image_rect = bot_image.get_rect()
-        bot_image = pygame.transform.scale(bot_image, (261, 261))
+        bot_image = self.__setImage('./assets/images/modes/bot.png')
+        bot_sizes = {
+            'x': 261,
+            'y': 261,
+            'pos_x': 117,
+            'pos_y': 340
+        }
+        bot_image = pygame.transform.scale(bot_image, (bot_sizes['x'], bot_sizes['y']))
+        bot_image_rect = pygame.rect.Rect.move(bot_image.get_rect(), bot_sizes['pos_x'], bot_sizes['pos_y'])
 
         local_image = self.__setImage('./assets/images/modes/local.png')
-        local_image_rect = local_image.get_rect()
-        local_image = pygame.transform.scale(local_image, (261, 261))
+        local_sizes = {
+            'x': 261,
+            'y': 261,
+            'pos_x': 511,
+            'pos_y': 340
+        }
+        local_image = pygame.transform.scale(local_image, (local_sizes['x'], local_sizes['y']))
+        local_image_rect = pygame.rect.Rect.move(local_image.get_rect(), local_sizes['pos_x'], local_sizes['pos_y'])
 
         online_image = self.__setImage('./assets/images/modes/online.png')
-        online_image_rect = online_image.get_rect()
-        online_image = pygame.transform.scale(online_image, (261, 261))
+        online_sizes = {
+            'x': 261,
+            'y': 261,
+            'pos_x': 905,
+            'pos_y': 340
+        }
+        online_image = pygame.transform.scale(online_image, (online_sizes['x'], online_sizes['y']))
+        online_image_rect = pygame.rect.Rect.move(online_image.get_rect(), online_sizes['pos_x'], online_sizes['pos_y'])
 
         run = True
         while run:
             self.surf.blit(background_image, (0, 0))
-            self.surf.blit(bot_image, (117, 340))
-            self.surf.blit(local_image, (511, 340))
-            self.surf.blit(online_image, (905, 340))
+            self.surf.blit(bot_image, (bot_sizes['pos_x'], bot_sizes['pos_y']))
+            self.surf.blit(local_image, (local_sizes['pos_x'], local_sizes['pos_y']))
+            self.surf.blit(online_image, (online_sizes['pos_x'], online_sizes['pos_y']))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -46,11 +64,11 @@ class Core:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # clic gauche
                         if bot_image_rect.collidepoint(event.pos):
-                            print('bot')
+                            self.bot()
                         if local_image_rect.collidepoint(event.pos):
-                            print('friend')
+                            self.friend()
                         if online_image_rect.collidepoint(event.pos):
-                            print('stranger')
+                            self.stranger()
                         # if close_area.collidepoint(event.pos):
                         #     print('close')
             pygame.display.update()
@@ -60,10 +78,10 @@ class Core:
         return pygame.image.load(fr'{image}').convert_alpha()
 
     def bot(self):
-        return True
+        print('bot')
 
     def friend(self):
-        return True
+        print('friend')
 
     def stranger(self):
-        return True
+        print('stranger')
