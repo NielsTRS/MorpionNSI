@@ -64,11 +64,11 @@ class Core:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # clic gauche
                         if bot_image_rect.collidepoint(event.pos):
-                            print('bot')
+                            self.bot()
                         if local_image_rect.collidepoint(event.pos):
-                            print('friend')
+                            self.friend()
                         if online_image_rect.collidepoint(event.pos):
-                            print('stranger')
+                            self.stranger()
                         # if close_area.collidepoint(event.pos):
                         #     print('close')
             pygame.display.update()
@@ -78,10 +78,10 @@ class Core:
         return pygame.image.load(fr'{image}').convert_alpha()
 
     def bot(self):
-        return True
+        print('bot')
 
     def friend(self):
-        return True
+        print('friend')
 
     def stranger(self):
-        return True
+        print('stranger')
