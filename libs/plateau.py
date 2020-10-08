@@ -11,8 +11,12 @@ class Plateau():
         else:
             self.pions[i] = player
             self.coups += 1
-            if self.coups > 4: self.check_win(i, player)
+            if self.coups > 4 and self.check_win(i, player):
+                return self.win(player)
             return True
+
+    def win(self, player):
+        print(f"Le joueur {player} a gagné !")
 
     def fill(self, pions = []):
         self.pions = [0 for i in range(0,9)] if len(pions) == 0 else pions
@@ -26,11 +30,26 @@ class Plateau():
         if i < 3: l = 1
         elif i < 6 and i >= 3: l = 2
         else: l = 3
-        print(l)
+        if self.pions[(3*l-3)] == player and self.pions[3*l-2] == player and self.pions[3*l-1] == player:
+            return True
         # Colonne
-
+        if i == 0 or i == 3 or i == 6:
+            c = 1
+        elif i == 1 or i == 4 or i == 7:
+            c = 2
+        else:
+            c = 3
+        if self.pions[c*1-1] == player and self.pions[c*1+2] == player and self.pions[c*1+5] == player:
+            return True
         # Diagonale
-
+        try:
+            [0,2,4,6,8].index(i) # On vérifie si le pion posé est sur les coins ou au centre.
+            if self.pions[0] == player and self.pions[4] == player and self.pions[8]: # Diagonale haut gauche vers bas droite
+                return True
+            elif self.pions[2] == player and self.pions[4] == player and self.pions[6] == player: # Diagonale haute droite vers bas gauche
+                return True
+        except:
+            return False
 
 
     def __str__(self):
@@ -41,17 +60,3 @@ class Plateau():
             for j in range(i*3,i*3+3):
                 text += "   " if (self.pions[j] == 0) else " X " if self.pions[j] == 1 else " O "
         return text
-
-def test():
-    tableau = Plateau([
-            1, -1, 1,
-            1, 0, -1,
-            -1, 1, -1
-        ])
-    tableau.check_win(7,1)
-    tableau.check_win(1,1)
-    tableau.check_win(2,1)
-    tableau.check_win(4,1)
-
-
-test()
