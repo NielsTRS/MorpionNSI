@@ -15,20 +15,18 @@ class Core:
             self.x = x
             self.y = y
             self.surf = pygame.display.set_mode((self.x, self.y))
+            self.status = True
         else:
             raise TypeError("Les paramètres doivent être définis par des nombres")
 
     def start(self):
-        while True:
-            pygame.display.init()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
+        pygame.init()
+        pygame.font.init()
+        while self.status:
+            self.showIndex()
             pygame.display.flip()
-            self.show_index()
 
-    def show_index(self):
-
+    def showIndex(self):
         bot_image = self.__loadImage('./assets/images/modes/bot.png')
         bot_sizes = {
             'x': 261,
@@ -65,22 +63,24 @@ class Core:
         self.surf.blit(online_image, (online_sizes['pos_x'], online_sizes['pos_y']))
 
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.status = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # clic gauche
                     if bot_image_rect.collidepoint(event.pos):
-                        self.show_bot()
+                        self.showBot()
                     if local_image_rect.collidepoint(event.pos):
-                        self.show_friend()
+                        self.showLocal()
                     if online_image_rect.collidepoint(event.pos):
-                        self.show_stranger()
+                        self.showOnline()
 
-    def show_bot(self):
+    def showBot(self):
         self.__setBackgroundImage('./assets/images/game_screen.png')
 
-    def show_friend(self):
+    def showLocal(self):
         print('friend')
 
-    def show_stranger(self):
+    def showOnline(self):
         print('stranger')
 
     def __loadImage(self, image: str):
