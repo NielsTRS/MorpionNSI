@@ -89,10 +89,3 @@ class Plateau():
             for j in range(i*3,i*3+3):
                 text += "   " if (self.pions[j] == 0) else " X " if self.pions[j] == 1 else " O "
         return text
-
-plateau = Plateau([
-    1, 0, 0,
-    0, 0, 0,
-    0, 0, 0
-])
-plateau.add(0,1)
