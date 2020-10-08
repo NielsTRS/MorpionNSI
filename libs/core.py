@@ -69,9 +69,19 @@ class Core:
                         if online_image_rect.collidepoint(event.pos):
                             self.showOnline()
             pygame.display.flip()
-            
+
     def showBot(self):
         self.__setBackgroundImage('./assets/images/game_screen.png')
+
+        close_image = self.__loadImage('./assets/images/modes/bot.png')
+        close_sizes = {
+            'x': 261,
+            'y': 261,
+            'pos_x': 58,
+            'pos_y': 58
+        }
+        close_image = pygame.transform.scale(close_image, (close_sizes['x'], close_sizes['y']))
+        close_image_rect = pygame.rect.Rect.move(close_image.get_rect(), close_sizes['pos_x'], close_sizes['pos_y'])
 
     def showLocal(self):
         print('friend')
