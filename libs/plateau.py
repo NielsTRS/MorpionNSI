@@ -3,11 +3,18 @@ class Plateau():
         self.fill(pions)
         self.coups = 0
     
-    def add(self, i, player):
+    def add(self, i: int, player: int):
+        """
+        Description: rajoute un pion à la case "i" souhaitée pour le joueur "player"
+        :param i: Index de la case compris entre 0 et 8 inclus
+        :type i: int 
+        :param player: Numéro du joueur (1 pour J1 et -1 pour J2)
+        :type i: int
+        """
         if len(self.pions) < i or i < 0 or not isinstance(i, int):
             raise ValueError(f"{i} n'est pas une valeur valide (essayez avec un entier entre 0 et {len(self.pions)-1})")
-        if self.pions[i] >= 1:
-            return False
+        if self.pions[i] != 0:
+            raise ValueError(f"La case {i} est déjà occupée.")
         else:
             self.pions[i] = player
             self.coups += 1
