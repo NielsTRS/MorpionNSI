@@ -23,12 +23,25 @@ class Plateau():
             return True
 
     def win(self, player):
+        """
+        Description: exécute le code final lorsqu'une victoire est testée !
+        :param player: Le joueur qui a remporté cette manche (1 pour J1 et -1 pour J2)
+        :type player: int
+        """
         print(f"Le joueur {player} a gagné !")
 
     def fill(self, pions = []):
+        """
+        Description: rempli le plateau avec des cases vides ou prédéfinies
+        :param pions: Liste des cases prédéfinies (laissez vide pour remplir normalement)
+        :type pions: array
+        """
         self.pions = [0 for i in range(0,9)] if len(pions) == 0 else pions
 
     def reset(self):
+        """
+        Description: vide et rempli le plateau
+        """
         self.fill()
         self.pions = [0 for i in range(0,9)]
 
@@ -67,3 +80,10 @@ class Plateau():
             for j in range(i*3,i*3+3):
                 text += "   " if (self.pions[j] == 0) else " X " if self.pions[j] == 1 else " O "
         return text
+
+plateau = Plateau([
+    1, 0, 0,
+    0, 0, 0,
+    0, 0, 0
+])
+plateau.add(0,1)
