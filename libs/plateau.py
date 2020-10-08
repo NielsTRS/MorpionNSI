@@ -80,7 +80,9 @@ class Plateau():
 
 
     def __str__(self):
-        print(self.pions)
+        """
+        Description: affichage du plateau dans la console via un print
+        """
         text = ""
         for i in range(0,3):
             if i!=0: text+="\n"
