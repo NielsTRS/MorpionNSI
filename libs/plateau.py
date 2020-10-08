@@ -1,6 +1,6 @@
 class Plateau():
     def __init__(self, pions = []):
-        self.pions = [0 for i in range(0,9)] if len(pions) == 0 else pions
+        self.fill(pions)
         self.coups = 0
     
     def add(self, i, player):
@@ -14,14 +14,19 @@ class Plateau():
             if self.coups > 4: self.check_win(i, player)
             return True
 
+    def fill(self, pions = []):
+        self.pions = [0 for i in range(0,9)] if len(pions) == 0 else pions
+
+    def reset(self):
+        self.fill()
+        self.pions = [0 for i in range(0,9)]
+
     def check_win(self, i, player):
         # Ligne
-        try:
-            a = [0,1,2].index(i)
-        except ValueError:
-            "Do nothing"
-        else:
-            "Ahaha"
+        if i < 3: l = 1
+        elif i < 6 and i >= 3: l = 2
+        else: l = 3
+        print(l)
         # Colonne
 
         # Diagonale
@@ -38,10 +43,15 @@ class Plateau():
         return text
 
 def test():
-    print(Plateau([
+    tableau = Plateau([
             1, -1, 1,
             1, 0, -1,
             -1, 1, -1
-        ]))
+        ])
+    tableau.check_win(7,1)
+    tableau.check_win(1,1)
+    tableau.check_win(2,1)
+    tableau.check_win(4,1)
+
 
 test()
