@@ -46,13 +46,20 @@ class Plateau():
         self.pions = [0 for i in range(0,9)]
 
     def check_win(self, i, player):
-        # Ligne
+        """
+        Description: vérifie les condition d'une victoire
+        :param i: Case à vérifier (entre 0 et 8 inclus)
+        :type i: int
+        :param player: Le dernier joueur à avoir joué.
+        :type player: int
+        """
+        # Victoire par Ligne
         if i < 3: l = 1
         elif i < 6 and i >= 3: l = 2
         else: l = 3
         if self.pions[(3*l-3)] == player and self.pions[3*l-2] == player and self.pions[3*l-1] == player:
             return True
-        # Colonne
+        # Victoire par Colonne
         if i == 0 or i == 3 or i == 6:
             c = 1
         elif i == 1 or i == 4 or i == 7:
@@ -61,9 +68,9 @@ class Plateau():
             c = 3
         if self.pions[c*1-1] == player and self.pions[c*1+2] == player and self.pions[c*1+5] == player:
             return True
-        # Diagonale
+        # Victoire par Diagonale
         try:
-            [0,2,4,6,8].index(i) # On vérifie si le pion posé est sur les coins ou au centre.
+            [0,2,4,6,8].index(i) # On vérifie si le pion posé se trouve sur les coins ou au centre.
             if self.pions[0] == player and self.pions[4] == player and self.pions[8]: # Diagonale haut gauche vers bas droite
                 return True
             elif self.pions[2] == player and self.pions[4] == player and self.pions[6] == player: # Diagonale haute droite vers bas gauche
