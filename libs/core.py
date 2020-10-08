@@ -19,13 +19,6 @@ class Core:
         else:
             raise TypeError("Les paramètres doivent être définis par des nombres")
 
-    def start(self):
-        pygame.init()
-        pygame.font.init()
-        while self.status:
-            self.showIndex()
-            pygame.display.flip()
-
     def showIndex(self):
         bot_image = self.__loadImage('./assets/images/modes/bot.png')
         bot_sizes = {
@@ -55,25 +48,28 @@ class Core:
             'pos_y': 340
         }
         online_image = pygame.transform.scale(online_image, (online_sizes['x'], online_sizes['y']))
-        online_image_rect = pygame.rect.Rect.move(online_image.get_rect(), online_sizes['pos_x'], online_sizes['pos_y'])
+        online_image_rect = pygame.rect.Rect.move(online_image.get_rect(), online_sizes['pos_x'],
+                                                  online_sizes['pos_y'])
 
         self.__setBackgroundImage('./assets/images/main_menu.png')
         self.surf.blit(bot_image, (bot_sizes['pos_x'], bot_sizes['pos_y']))
         self.surf.blit(local_image, (local_sizes['pos_x'], local_sizes['pos_y']))
         self.surf.blit(online_image, (online_sizes['pos_x'], online_sizes['pos_y']))
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.status = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:  # clic gauche
-                    if bot_image_rect.collidepoint(event.pos):
-                        self.showBot()
-                    if local_image_rect.collidepoint(event.pos):
-                        self.showLocal()
-                    if online_image_rect.collidepoint(event.pos):
-                        self.showOnline()
-
+        while self.status:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.status = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:  # clic gauche
+                        if bot_image_rect.collidepoint(event.pos):
+                            self.showBot()
+                        if local_image_rect.collidepoint(event.pos):
+                            self.showLocal()
+                        if online_image_rect.collidepoint(event.pos):
+                            self.showOnline()
+            pygame.display.flip()
+            
     def showBot(self):
         self.__setBackgroundImage('./assets/images/game_screen.png')
 
