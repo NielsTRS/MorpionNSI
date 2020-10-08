@@ -19,9 +19,17 @@ class Core:
             raise TypeError("Les paramètres doivent être définis par des nombres")
 
     def start(self):
-        background_image = self.__setImage('./assets/images/main_menu.png')
+        while True:
+            pygame.display.init()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+            pygame.display.flip()
+            self.show_index()
 
-        bot_image = self.__setImage('./assets/images/modes/bot.png')
+    def show_index(self):
+
+        bot_image = self.__loadImage('./assets/images/modes/bot.png')
         bot_sizes = {
             'x': 261,
             'y': 261,
@@ -31,7 +39,7 @@ class Core:
         bot_image = pygame.transform.scale(bot_image, (bot_sizes['x'], bot_sizes['y']))
         bot_image_rect = pygame.rect.Rect.move(bot_image.get_rect(), bot_sizes['pos_x'], bot_sizes['pos_y'])
 
-        local_image = self.__setImage('./assets/images/modes/local.png')
+        local_image = self.__loadImage('./assets/images/modes/local.png')
         local_sizes = {
             'x': 261,
             'y': 261,
@@ -41,7 +49,7 @@ class Core:
         local_image = pygame.transform.scale(local_image, (local_sizes['x'], local_sizes['y']))
         local_image_rect = pygame.rect.Rect.move(local_image.get_rect(), local_sizes['pos_x'], local_sizes['pos_y'])
 
-        online_image = self.__setImage('./assets/images/modes/online.png')
+        online_image = self.__loadImage('./assets/images/modes/online.png')
         online_sizes = {
             'x': 261,
             'y': 261,
@@ -51,37 +59,32 @@ class Core:
         online_image = pygame.transform.scale(online_image, (online_sizes['x'], online_sizes['y']))
         online_image_rect = pygame.rect.Rect.move(online_image.get_rect(), online_sizes['pos_x'], online_sizes['pos_y'])
 
-        run = True
-        while run:
-            self.surf.blit(background_image, (0, 0))
-            self.surf.blit(bot_image, (bot_sizes['pos_x'], bot_sizes['pos_y']))
-            self.surf.blit(local_image, (local_sizes['pos_x'], local_sizes['pos_y']))
-            self.surf.blit(online_image, (online_sizes['pos_x'], online_sizes['pos_y']))
+        self.__setBackgroundImage('./assets/images/main_menu.png')
+        self.surf.blit(bot_image, (bot_sizes['pos_x'], bot_sizes['pos_y']))
+        self.surf.blit(local_image, (local_sizes['pos_x'], local_sizes['pos_y']))
+        self.surf.blit(online_image, (online_sizes['pos_x'], online_sizes['pos_y']))
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run = False
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:  # clic gauche
-                        if bot_image_rect.collidepoint(event.pos):
-                            self.bot()
-                        if local_image_rect.collidepoint(event.pos):
-                            self.friend()
-                        if online_image_rect.collidepoint(event.pos):
-                            self.stranger()
-                        # if close_area.collidepoint(event.pos):
-                        #     print('close')
-            pygame.display.update()
-        pygame.quit()
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # clic gauche
+                    if bot_image_rect.collidepoint(event.pos):
+                        self.show_bot()
+                    if local_image_rect.collidepoint(event.pos):
+                        self.show_friend()
+                    if online_image_rect.collidepoint(event.pos):
+                        self.show_stranger()
 
-    def __setImage(self, image: str):
-        return pygame.image.load(fr'{image}').convert_alpha()
+    def show_bot(self):
+        self.__setBackgroundImage('./assets/images/game_screen.png')
 
-    def bot(self):
-        print('bot')
-
-    def friend(self):
+    def show_friend(self):
         print('friend')
 
-    def stranger(self):
+    def show_stranger(self):
         print('stranger')
+
+    def __loadImage(self, image: str):
+        return pygame.image.load(fr'{image}').convert_alpha()
+
+    def __setBackgroundImage(self, image: str):
+        self.surf.blit(self.__loadImage(image), (0, 0))
