@@ -28,6 +28,7 @@ class Plateau():
         :param player: Le joueur qui a remporté cette manche (1 pour J1 et -1 pour J2)
         :type player: int
         """
+        # TODO
         print(f"Le joueur {player} a gagné !")
 
     def fill(self, pions = []):
