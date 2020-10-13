@@ -1,8 +1,6 @@
 # coding: utf-8
 
 import pygame
-pygame.font.init()
-myfont = pygame.font.Font('./assets/fonts/montserrat.ttf', 30)
 
 
 class Core:
@@ -19,6 +17,8 @@ class Core:
             self.y = y
             self.status = True
             self.surf = pygame.display.set_mode((self.x, self.y))
+            pygame.font.init()
+            self.myfont = pygame.font.Font('./assets/fonts/montserrat.ttf', 30)
             self.bot_image = self.__loadImage('./assets/images/modes/bot.png')
             self.bot_sizes = {
                 'x': 261,
@@ -104,7 +104,6 @@ class Core:
                             self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
 
                         if self.local_image_rect.collidepoint(event.pos): #local mode
-                            print("Début de la partie")
                             self.__setBackgroundImage('./assets/images/game_screen.png')
                             self.surf.blit(self.local_image_icn,
                                            (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
