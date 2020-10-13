@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import pygame
-
+import libs.plateau as pl
 
 class Core:
     def __init__(self, x: int, y: int):
@@ -108,6 +108,8 @@ class Core:
                             self.surf.blit(self.local_image_icn,
                                            (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
                             self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
+                            self.plateau = pl.Plateau([0,0,0,1,0,0,0,0,0])
+                            self.showPions()
 
                         if self.online_image_rect.collidepoint(event.pos): #online mode
                             self.__setBackgroundImage('./assets/images/game_screen.png')
@@ -129,6 +131,7 @@ class Core:
         self.surf.blit(self.bot_image, (self.bot_sizes['pos_x'], self.bot_sizes['pos_y']))
         self.surf.blit(self.local_image, (self.local_sizes['pos_x'], self.local_sizes['pos_y']))
         self.surf.blit(self.online_image, (self.online_sizes['pos_x'], self.online_sizes['pos_y']))
+
     def __loadImage(self, image: str):
         """
         Private function to load an image
@@ -146,3 +149,12 @@ class Core:
         :return:
         """
         self.surf.blit(self.__loadImage(image), (0, 0))
+
+    def showPions(self):
+        """
+        Description: Affiche les pions sur leur emplacement dans le plateau
+        """
+        print(self.plateau.pions)
+        pions = self.plateau.pions
+        for i in range(0,len(pions)):
+            
