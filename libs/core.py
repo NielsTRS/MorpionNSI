@@ -82,6 +82,18 @@ class Core:
             self.close_image = pygame.transform.scale(self.close_image, (self.close_sizes['x'], self.close_sizes['y']))
             self.close_image_rect = pygame.rect.Rect.move(self.close_image.get_rect(), self.close_sizes['pos_x'],
                                                           self.close_sizes['pos_y'])
+
+            self.index_pions = [
+                [127,1],
+                [127,2],
+                [127,3],
+                [127,127],
+                [127,127],
+                [127,127],
+                [127,127],
+                [127,127],
+                [127,128]
+            ]
         else:
             raise TypeError("Les paramètres doivent être définis par des nombres")
 
@@ -157,4 +169,4 @@ class Core:
         print(self.plateau.pions)
         pions = self.plateau.pions
         for i in range(0,len(pions)):
-            
+            print(self.index_pions[i])
