@@ -1,6 +1,8 @@
 # coding: utf-8
 
 import pygame
+pygame.font.init()
+myfont = pygame.font.Font('./assets/fonts/montserrat.ttf', 30)
 
 
 class Core:
@@ -101,7 +103,12 @@ class Core:
                                            (self.bot_sizes['pos_x_icn'], self.bot_sizes['pos_y_icn']))
                             self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
 
+<<<<<<< HEAD
                         if self.local_image_rect.collidepoint(event.pos): #local mode
+=======
+                        if self.local_image_rect.collidepoint(event.pos):
+                            print("Début de la partie")
+>>>>>>> 1e3cc42eedff9f2cdd7acd45ef387f0398d7f663
                             self.__setBackgroundImage('./assets/images/game_screen.png')
                             self.surf.blit(self.local_image_icn,
                                            (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
@@ -127,7 +134,7 @@ class Core:
         self.surf.blit(self.bot_image, (self.bot_sizes['pos_x'], self.bot_sizes['pos_y']))
         self.surf.blit(self.local_image, (self.local_sizes['pos_x'], self.local_sizes['pos_y']))
         self.surf.blit(self.online_image, (self.online_sizes['pos_x'], self.online_sizes['pos_y']))
-
+        self.surf.blit(self.textsurface,(0,0))
     def __loadImage(self, image: str):
         """
         Private function to load an image
