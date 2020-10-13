@@ -14,80 +14,111 @@ class Core:
         if isinstance(x, int) and isinstance(y, int):
             self.x = x
             self.y = y
-            self.surf = pygame.display.set_mode((self.x, self.y))
             self.status = True
+            self.surf = pygame.display.set_mode((self.x, self.y))
+            self.bot_image = self.__loadImage('./assets/images/modes/bot.png')
+            self.bot_sizes = {
+                'x': 261,
+                'x_icn': 120,
+                'y': 261,
+                'y_icn': 120,
+                'pos_x': 117,
+                'pos_x_icn': 20,
+                'pos_y': 340,
+                'pos_y_icn': 10,
+            }
+            self.bot_image = pygame.transform.scale(self.bot_image, (self.bot_sizes['x'], self.bot_sizes['y']))
+            self.bot_image_icn = pygame.transform.scale(self.bot_image,
+                                                        (self.bot_sizes['x_icn'], self.bot_sizes['y_icn']))
+            self.bot_image_rect = pygame.rect.Rect.move(self.bot_image.get_rect(), self.bot_sizes['pos_x'],
+                                                        self.bot_sizes['pos_y'])
+
+            self.local_image = self.__loadImage('./assets/images/modes/local.png')
+            self.local_sizes = {
+                'x': 261,
+                'x_icn': 120,
+                'y': 261,
+                'y_icn': 120,
+                'pos_x': 511,
+                'pos_x_icn': 20,
+                'pos_y': 340,
+                'pos_y_icn': 10,
+            }
+            self.local_image = pygame.transform.scale(self.local_image, (self.local_sizes['x'], self.local_sizes['y']))
+            self.local_image_icn = pygame.transform.scale(self.local_image,
+                                                          (self.local_sizes['x_icn'], self.local_sizes['y_icn']))
+            self.local_image_rect = pygame.rect.Rect.move(self.local_image.get_rect(), self.local_sizes['pos_x'],
+                                                          self.local_sizes['pos_y'])
+
+            self.online_image = self.__loadImage('./assets/images/modes/online.png')
+            self.online_sizes = {
+                'x': 261,
+                'x_icn': 120,
+                'y': 261,
+                'y_icn': 120,
+                'pos_x': 905,
+                'pos_x_icn': 20,
+                'pos_y': 340,
+                'pos_y_icn': 10,
+
+            }
+            self.online_image = pygame.transform.scale(self.online_image,
+                                                       (self.online_sizes['x'], self.online_sizes['y']))
+            self.online_image_icn = pygame.transform.scale(self.online_image,
+                                                           (self.online_sizes['x_icn'], self.online_sizes['y_icn']))
+            self.online_image_rect = pygame.rect.Rect.move(self.online_image.get_rect(), self.online_sizes['pos_x'],
+                                                           self.online_sizes['pos_y'])
+
+            self.close_image = self.__loadImage('./assets/images/buttons/quit.png')
+            self.close_sizes = {
+                'x': 58,
+                'y': 58,
+                'pos_x': 1175,
+                'pos_y': 45
+            }
+            self.close_image = pygame.transform.scale(self.close_image, (self.close_sizes['x'], self.close_sizes['y']))
+            self.close_image_rect = pygame.rect.Rect.move(self.close_image.get_rect(), self.close_sizes['pos_x'],
+                                                          self.close_sizes['pos_y'])
         else:
             raise TypeError("Les paramètres doivent être définis par des nombres")
 
-    def showIndex(self):
-        bot_image = self.__loadImage('./assets/images/modes/bot.png')
-        bot_sizes = {
-            'x': 261,
-            'y': 261,
-            'pos_x': 117,
-            'pos_y': 340
-        }
-        bot_image = pygame.transform.scale(bot_image, (bot_sizes['x'], bot_sizes['y']))
-        bot_image_rect = pygame.rect.Rect.move(bot_image.get_rect(), bot_sizes['pos_x'], bot_sizes['pos_y'])
+    def start(self):
 
-        local_image = self.__loadImage('./assets/images/modes/local.png')
-        local_sizes = {
-            'x': 261,
-            'y': 261,
-            'pos_x': 511,
-            'pos_y': 340
-        }
-        local_image = pygame.transform.scale(local_image, (local_sizes['x'], local_sizes['y']))
-        local_image_rect = pygame.rect.Rect.move(local_image.get_rect(), local_sizes['pos_x'], local_sizes['pos_y'])
-
-        online_image = self.__loadImage('./assets/images/modes/online.png')
-        online_sizes = {
-            'x': 261,
-            'y': 261,
-            'pos_x': 905,
-            'pos_y': 340
-        }
-        online_image = pygame.transform.scale(online_image, (online_sizes['x'], online_sizes['y']))
-        online_image_rect = pygame.rect.Rect.move(online_image.get_rect(), online_sizes['pos_x'],
-                                                  online_sizes['pos_y'])
-
-        self.__setBackgroundImage('./assets/images/main_menu.png')
-        self.surf.blit(bot_image, (bot_sizes['pos_x'], bot_sizes['pos_y']))
-        self.surf.blit(local_image, (local_sizes['pos_x'], local_sizes['pos_y']))
-        self.surf.blit(online_image, (online_sizes['pos_x'], online_sizes['pos_y']))
-
+        self.showIndex()
         while self.status:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.status = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # clic gauche
-                        if bot_image_rect.collidepoint(event.pos):
-                            self.showBot()
-                        if local_image_rect.collidepoint(event.pos):
-                            self.showLocal()
-                        if online_image_rect.collidepoint(event.pos):
-                            self.showOnline()
+                        if self.bot_image_rect.collidepoint(event.pos):
+                            self.__setBackgroundImage('./assets/images/game_screen.png')
+                            self.surf.blit(self.bot_image_icn,
+                                           (self.bot_sizes['pos_x_icn'], self.bot_sizes['pos_y_icn']))
+                            self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
+
+                        if self.local_image_rect.collidepoint(event.pos):
+                            self.__setBackgroundImage('./assets/images/game_screen.png')
+                            self.surf.blit(self.local_image_icn,
+                                           (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
+                            self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
+
+                        if self.online_image_rect.collidepoint(event.pos):
+                            self.__setBackgroundImage('./assets/images/game_screen.png')
+                            self.surf.blit(self.online_image_icn,
+                                           (self.online_sizes['pos_x_icn'], self.online_sizes['pos_y_icn']))
+                            self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
+
+                        if self.close_image_rect.collidepoint(event.pos):
+                            self.showIndex()
+
             pygame.display.flip()
 
-    def showBot(self):
-        self.__setBackgroundImage('./assets/images/game_screen.png')
-
-        close_image = self.__loadImage('./assets/images/modes/bot.png')
-        close_sizes = {
-            'x': 261,
-            'y': 261,
-            'pos_x': 58,
-            'pos_y': 58
-        }
-        close_image = pygame.transform.scale(close_image, (close_sizes['x'], close_sizes['y']))
-        close_image_rect = pygame.rect.Rect.move(close_image.get_rect(), close_sizes['pos_x'], close_sizes['pos_y'])
-
-    def showLocal(self):
-        print('friend')
-
-    def showOnline(self):
-        print('stranger')
+    def showIndex(self):
+        self.__setBackgroundImage('./assets/images/main_menu.png')
+        self.surf.blit(self.bot_image, (self.bot_sizes['pos_x'], self.bot_sizes['pos_y']))
+        self.surf.blit(self.local_image, (self.local_sizes['pos_x'], self.local_sizes['pos_y']))
+        self.surf.blit(self.online_image, (self.online_sizes['pos_x'], self.online_sizes['pos_y']))
 
     def __loadImage(self, image: str):
         return pygame.image.load(fr'{image}').convert_alpha()
