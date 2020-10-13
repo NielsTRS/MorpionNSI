@@ -104,6 +104,7 @@ class Core:
                             self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
 
                         if self.local_image_rect.collidepoint(event.pos): #local mode
+                            print("Début de la partie")
                             self.__setBackgroundImage('./assets/images/game_screen.png')
                             self.surf.blit(self.local_image_icn,
                                            (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
