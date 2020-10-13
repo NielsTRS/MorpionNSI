@@ -18,7 +18,7 @@ class Core:
             self.status = True
             self.surf = pygame.display.set_mode((self.x, self.y))
             pygame.font.init()
-            self.myfont = pygame.font.Font('./assets/fonts/montserrat.ttf', 30)
+            self.my_font = pygame.font.Font('./assets/fonts/montserrat.ttf', 30)
             self.bot_image = self.__loadImage('./assets/images/modes/bot.png')
             self.bot_sizes = {
                 'x': 261,
@@ -129,7 +129,6 @@ class Core:
         self.surf.blit(self.bot_image, (self.bot_sizes['pos_x'], self.bot_sizes['pos_y']))
         self.surf.blit(self.local_image, (self.local_sizes['pos_x'], self.local_sizes['pos_y']))
         self.surf.blit(self.online_image, (self.online_sizes['pos_x'], self.online_sizes['pos_y']))
-        self.surf.blit(self.textsurface,(0,0))
     def __loadImage(self, image: str):
         """
         Private function to load an image
