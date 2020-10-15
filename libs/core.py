@@ -117,6 +117,7 @@ class Core:
                                 self.surf.blit(self.bot_image_icn,
                                             (self.bot_sizes['pos_x_icn'], self.bot_sizes['pos_y_icn']))
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
+                                self.game_status = 1 # Démarrage de la partie en mode J1 Vs AI
 
                             if self.local_image_rect.collidepoint(event.pos): #local mode
                                 self.__setBackgroundImage('./assets/images/game_screen.png')
@@ -132,6 +133,7 @@ class Core:
                                 self.surf.blit(self.online_image_icn,
                                             (self.online_sizes['pos_x_icn'], self.online_sizes['pos_y_icn']))
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
+                                self.game_status = 3 # Démarrage de la partie en mode J1 Vs J2
 
                         if self.game_status > 0 and self.game_status < 4: #Partie démarrée et "non-finie"
                             print(event.pos)
