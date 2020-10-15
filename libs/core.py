@@ -131,7 +131,7 @@ class Core:
                                             (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
                                 self.game_status = 2 # Démarrage de la partie en mode local
-                                self.plateau = pl.Plateau([1,-1,1,0,0,0,0,0,0])
+                                self.plateau = pl.Plateau([0,0,0,0,0,0,0,0,0])
                                 self.__showPions()
 
                             if self.online_image_rect.collidepoint(event.pos): #online mode
