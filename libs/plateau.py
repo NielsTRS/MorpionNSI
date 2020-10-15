@@ -14,7 +14,8 @@ class Plateau():
         if len(self.pions) < i or i < 0 or not isinstance(i, int):
             raise ValueError(f"{i} n'est pas une valeur valide (essayez avec un entier entre 0 et {len(self.pions)-1})")
         if self.pions[i] != 0:
-            raise ValueError(f"La case {i} est déjà occupée.")
+            # raise ValueError(f"La case {i} est déjà occupée.")
+            return False
         else:
             self.pions[i] = player
             self.coups += 1
