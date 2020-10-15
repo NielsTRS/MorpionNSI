@@ -186,7 +186,7 @@ class Core:
         x = pos[0]
         y = pos[1]
         for i in range(0,len(self.index_pions)):
-            if x >= self.index_pions[i][0] and x <= self.index_pions[i][0]+144 and y >= self.index_pions[i][1] and y <= self.index_pions[i][1]+144:
+            if self.index_pions[i][0] <= x <= self.index_pions[i][0]+144 and self.index_pions[i][1] <= y <= self.index_pions[i][1]+144:
                 return i
         return -1
 
