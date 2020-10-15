@@ -19,7 +19,6 @@ class Plateau():
         else:
             self.pions[i] = player
             self.coups += 1
-            temp = 0
             if self.coups > 4 and self.check_win(i, player):
                 return 2
             return 1
