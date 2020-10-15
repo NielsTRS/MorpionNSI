@@ -18,6 +18,7 @@ class Core:
             self.game_status = 0
             self.status = True
             self.surf = pygame.display.set_mode((self.x, self.y))
+            self.surf_pions = pygame.display.set_mode((self.x, self.y))
             pygame.font.init()
             self.my_font = pygame.font.Font('./assets/fonts/montserrat.ttf', 30)
             self.bot_image = self.__loadImage('./assets/images/modes/bot.png')
@@ -85,19 +86,22 @@ class Core:
                                                           self.close_sizes['pos_y'])
 
             self.index_pions = [
-                [132,137],
-                [285,137],
-                [434,137],
+                (132,137),
+                (285,137),
+                (434,137),
                 
-                [132,291],
-                [285,291],
-                [434,291],
+                (132,291),
+                (285,291),
+                (434,291),
 
-                [132,439],
-                [285,439],
-                [434,439],
+                (132,439),
+                (285,439),
+                (434,439),
             ]
             self.player = -1
+            self.pions = []
+
+            self.players_pions = [pygame.transform.scale(self.__loadImage('./assets/images/players/circle.png'), (144, 144)),pygame.transform.scale(self.__loadImage('./assets/images/players/cross.png'), (144, 144))]
         else:
             raise TypeError("Les paramètres doivent être définis par des nombres")
 
@@ -127,7 +131,7 @@ class Core:
                                             (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
                                 self.game_status = 2 # Démarrage de la partie en mode local
-                                self.plateau = pl.Plateau([0,0,0,0,0,0,0,0,0])
+                                self.plateau = pl.Plateau([1,-1,1,0,0,0,0,0,0])
                                 self.__showPions()
 
                             if self.online_image_rect.collidepoint(event.pos): #online mode
@@ -148,6 +152,7 @@ class Core:
                                 if self.plateau.add(index, self.player):
                                     print(f"Pion placé en index {index+1} par le joueur {self.player}")
                                     self.player *= -1
+                                    self.__showPions()
                                 else:
                                     print(f"Le pion placé en index {index+1} n'a pas pu être placé en {self.player}")
 
@@ -197,4 +202,6 @@ class Core:
         print(self.plateau.pions)
         pions = self.plateau.pions
         for i in range(0,len(pions)):
-            print(self.index_pions[i])
+            if pions[i] != 0:
+                # print(f"Pion détecté en index {i+1}")
+                self.surf_pions.blit(self.players_pions[int(0.5*pions[i]+0.5)], self.index_pions[i])
