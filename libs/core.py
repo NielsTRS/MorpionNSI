@@ -15,6 +15,7 @@ class Core:
         if isinstance(x, int) and isinstance(y, int):
             self.x = x
             self.y = y
+            self.game_status = 0
             self.status = True
             self.surf = pygame.display.set_mode((self.x, self.y))
             pygame.font.init()
@@ -84,15 +85,16 @@ class Core:
                                                           self.close_sizes['pos_y'])
 
             self.index_pions = [
-                [127,1],
-                [127,2],
-                [127,3],
-                [127,127],
-                [127,127],
-                [127,127],
-                [127,127],
-                [127,127],
-                [127,128]
+                [132,137],
+                [285,137],
+                [434,137],
+
+                [0,0],
+                [0,0],
+                [0,0],
+                [0,0],
+                [0,0],
+                [0,0]
             ]
         else:
             raise TypeError("Les paramètres doivent être définis par des nombres")
@@ -109,28 +111,31 @@ class Core:
                     self.status = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # left clic
-                        if self.bot_image_rect.collidepoint(event.pos): #bot mode
-                            self.__setBackgroundImage('./assets/images/game_screen.png')
-                            self.surf.blit(self.bot_image_icn,
-                                           (self.bot_sizes['pos_x_icn'], self.bot_sizes['pos_y_icn']))
-                            self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
+                        if self.game_status == 0: #Menu principal
+                            if self.bot_image_rect.collidepoint(event.pos): #bot mode
+                                self.__setBackgroundImage('./assets/images/game_screen.png')
+                                self.surf.blit(self.bot_image_icn,
+                                            (self.bot_sizes['pos_x_icn'], self.bot_sizes['pos_y_icn']))
+                                self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
 
-                        if self.local_image_rect.collidepoint(event.pos): #local mode
-                            self.__setBackgroundImage('./assets/images/game_screen.png')
-                            self.surf.blit(self.local_image_icn,
-                                           (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
-                            self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
-                            self.plateau = pl.Plateau([0,0,0,1,0,0,0,0,0])
-                            self.showPions()
+                            if self.local_image_rect.collidepoint(event.pos): #local mode
+                                self.__setBackgroundImage('./assets/images/game_screen.png')
+                                self.surf.blit(self.local_image_icn,
+                                            (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
+                                self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
+                                self.plateau = pl.Plateau([0,0,0,1,0,0,0,0,0])
+                                self.showPions()
 
-                        if self.online_image_rect.collidepoint(event.pos): #online mode
-                            self.__setBackgroundImage('./assets/images/game_screen.png')
-                            self.surf.blit(self.online_image_icn,
-                                           (self.online_sizes['pos_x_icn'], self.online_sizes['pos_y_icn']))
-                            self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
+                            if self.online_image_rect.collidepoint(event.pos): #online mode
+                                self.__setBackgroundImage('./assets/images/game_screen.png')
+                                self.surf.blit(self.online_image_icn,
+                                            (self.online_sizes['pos_x_icn'], self.online_sizes['pos_y_icn']))
+                                self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
 
-                        if self.close_image_rect.collidepoint(event.pos): #return to index
-                            self.__showIndex()
+                            if self.close_image_rect.collidepoint(event.pos): #return to index
+                                self.__showIndex()
+                        if self.game_status > 0 and self.game_status < 4: #Partie démarrée et "non-finie"
+                            print(event.pos)
 
             pygame.display.flip()
 
