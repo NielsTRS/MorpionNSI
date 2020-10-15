@@ -97,6 +97,7 @@ class Core:
                 [285,439],
                 [434,439],
             ]
+            self.player = -1
         else:
             raise TypeError("Les paramètres doivent être définis par des nombres")
 
@@ -126,7 +127,7 @@ class Core:
                                             (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
                                 self.game_status = 2 # Démarrage de la partie en mode local
-                                self.plateau = pl.Plateau([0,0,0,1,0,0,0,0,0])
+                                self.plateau = pl.Plateau([0,0,0,0,0,0,0,0,0])
                                 self.__showPions()
 
                             if self.online_image_rect.collidepoint(event.pos): #online mode
@@ -142,8 +143,13 @@ class Core:
                                 self.__showIndex()
                                 self.game_status = 0
                             
-                            print(self.__getIndex(event.pos))
-                            
+                            index = self.__getIndex(event.pos)
+                            if index >= 0:
+                                if self.plateau.add(index, self.player):
+                                    print(f"Pion placé en index {index+1} par le joueur {self.player}")
+                                    self.player *= -1
+                                else:
+                                    print(f"Le pion placé en index {index+1} n'a pas pu être placé en {self.player}")
 
 
             pygame.display.flip()
