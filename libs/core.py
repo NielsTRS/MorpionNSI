@@ -149,10 +149,13 @@ class Core:
                             
                             index = self.__getIndex(event.pos)
                             if index >= 0:
-                                if self.plateau.add(index, self.player):
+                                temp = self.plateau.add(index, self.player)
+                                if temp > 0:
                                     print(f"Pion placé en index {index+1} par le joueur {self.player}")
                                     self.player *= -1
                                     self.__showPions()
+                                    if temp == 2:
+                                        print("VICTOIRE !!!")
                                 else:
                                     print(f"Le pion placé en index {index+1} n'a pas pu être placé en {self.player}")
 

@@ -15,13 +15,14 @@ class Plateau():
             raise ValueError(f"{i} n'est pas une valeur valide (essayez avec un entier entre 0 et {len(self.pions)-1})")
         if self.pions[i] != 0:
             # raise ValueError(f"La case {i} est déjà occupée.")
-            return False
+            return 0
         else:
             self.pions[i] = player
             self.coups += 1
+            temp = 0
             if self.coups > 4 and self.check_win(i, player):
-                return self.win(player)
-            return True
+                return 2
+            return 1
 
     def win(self, player):
         """
