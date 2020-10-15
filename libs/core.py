@@ -85,22 +85,8 @@ class Core:
             self.close_image_rect = pygame.rect.Rect.move(self.close_image.get_rect(), self.close_sizes['pos_x'],
                                                           self.close_sizes['pos_y'])
 
-            self.index_pions = [
-                (132,137),
-                (285,137),
-                (434,137),
-                
-                (132,291),
-                (285,291),
-                (434,291),
-
-                (132,439),
-                (285,439),
-                (434,439),
-            ]
+            self.index_pions = [(132,137),(285,137),(434,137),(132,291),(285,291),(434,291),(132,439),(285,439),(434,439),]
             self.player = -1
-            self.pions = []
-
             self.players_pions = [pygame.transform.scale(self.__loadImage('./assets/images/players/circle.png'), (144, 144)),pygame.transform.scale(self.__loadImage('./assets/images/players/cross.png'), (144, 144))]
         else:
             raise TypeError("Les paramètres doivent être définis par des nombres")
@@ -132,6 +118,8 @@ class Core:
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
                                 self.game_status = 2 # Démarrage de la partie en mode local
                                 self.plateau = pl.Plateau([0,0,0,0,0,0,0,0,0])
+                                self.current_player = self.my_font.render(f"Au tour de J{int(0.5*self.player+1.5)}", False, (0,0,0))
+                                self.surf_pions.blit(self.current_player, (0,0))
                                 self.__showPions()
 
                             if self.online_image_rect.collidepoint(event.pos): #online mode
@@ -141,24 +129,27 @@ class Core:
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
                                 self.game_status = 3 # Démarrage de la partie en mode J1 Vs J2
 
-                        if self.game_status > 0 and self.game_status < 4: #Partie démarrée et "non-finie"
+                        if self.game_status > 0: #Partie démarrée et "non-finie"
                             print(event.pos)
                             if self.close_image_rect.collidepoint(event.pos): #return to index
                                 self.__showIndex()
                                 self.game_status = 0
                             
-                            index = self.__getIndex(event.pos)
-                            if index >= 0:
-                                temp = self.plateau.add(index, self.player)
-                                if temp > 0:
-                                    print(f"Pion placé en index {index+1} par le joueur {self.player}")
-                                    self.player *= -1
-                                    self.__showPions()
-                                    if temp == 2:
-                                        self.game_status = 4
-                                        print("VICTOIRE !!!")
-                                else:
-                                    print(f"Le pion placé en index {index+1} n'a pas pu être placé en {self.player}")
+                            if self.game_status < 4:
+                                index = self.__getIndex(event.pos)
+                                if index >= 0:
+                                    temp = self.plateau.add(index, self.player)
+                                    if temp > 0:
+                                        print(f"Pion placé en index {index+1} par le joueur {self.player}")
+                                        self.player *= -1
+                                        self.current_player = self.my_font.render(f"Au tour de J{int(0.5*self.player+1.5)}", False, (0,0,0)) #  TODO: Attention, le texte passe au-dessus de l'ancien (trouver un moyen de l'effacer)
+                                        self.surf_pions.blit(self.current_player, (0,0))
+                                        self.__showPions()
+                                        if temp == 2:
+                                            self.game_status = 4
+                                            print("VICTOIRE !!!")
+                                    else:
+                                        print(f"Le pion placé en index {index+1} n'a pas pu être placé en {self.player}")
 
 
             pygame.display.flip()
