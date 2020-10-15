@@ -88,13 +88,14 @@ class Core:
                 [132,137],
                 [285,137],
                 [434,137],
+                
+                [132,291],
+                [285,291],
+                [434,291],
 
-                [0,0],
-                [0,0],
-                [0,0],
-                [0,0],
-                [0,0],
-                [0,0]
+                [132,439],
+                [285,439],
+                [434,439],
             ]
         else:
             raise TypeError("Les paramètres doivent être définis par des nombres")
@@ -126,7 +127,7 @@ class Core:
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
                                 self.game_status = 2 # Démarrage de la partie en mode local
                                 self.plateau = pl.Plateau([0,0,0,1,0,0,0,0,0])
-                                self.showPions()
+                                self.__showPions()
 
                             if self.online_image_rect.collidepoint(event.pos): #online mode
                                 self.__setBackgroundImage('./assets/images/game_screen.png')
@@ -140,6 +141,10 @@ class Core:
                             if self.close_image_rect.collidepoint(event.pos): #return to index
                                 self.__showIndex()
                                 self.game_status = 0
+                            
+                            print(self.__getIndex(event.pos))
+                            
+
 
             pygame.display.flip()
 
@@ -171,7 +176,15 @@ class Core:
         """
         self.surf.blit(self.__loadImage(image), (0, 0))
 
-    def showPions(self):
+    def __getIndex(self, pos):
+        x = pos[0]
+        y = pos[1]
+        for i in range(0,len(self.index_pions)):
+            if x >= self.index_pions[i][0] and x <= self.index_pions[i][0]+144 and y >= self.index_pions[i][1] and y <= self.index_pions[i][1]+144:
+                return i
+        return -1
+
+    def __showPions(self):
         """
         Description: Affiche les pions sur leur emplacement dans le plateau
         """
