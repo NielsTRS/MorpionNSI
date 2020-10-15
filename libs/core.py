@@ -155,6 +155,7 @@ class Core:
                                     self.player *= -1
                                     self.__showPions()
                                     if temp == 2:
+                                        self.game_status = 4
                                         print("VICTOIRE !!!")
                                 else:
                                     print(f"Le pion placé en index {index+1} n'a pas pu être placé en {self.player}")
