@@ -133,10 +133,11 @@ class Core:
                                             (self.online_sizes['pos_x_icn'], self.online_sizes['pos_y_icn']))
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
 
-                            if self.close_image_rect.collidepoint(event.pos): #return to index
-                                self.__showIndex()
                         if self.game_status > 0 and self.game_status < 4: #Partie démarrée et "non-finie"
                             print(event.pos)
+                            if self.close_image_rect.collidepoint(event.pos): #return to index
+                                self.__showIndex()
+                                self.game_status = 0
 
             pygame.display.flip()
 
