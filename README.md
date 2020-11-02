@@ -14,4 +14,5 @@ Le fonctionnement du jeu est assez simple. Vous devez, une fois dans le menu pri
  - Mode local
  - Mode en ligne
  - Mode joueur contre robot
+
 *À noter que seul le mode "local" est disponible pour le moment.*
