@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import pygame
+from playsound import playsound
 import libs.plateau as pl
 
 class Core:
@@ -20,8 +21,15 @@ class Core:
             self.surf = pygame.display.set_mode((self.x, self.y))
             self.surf_pions = pygame.display.set_mode((self.x, self.y))
             pygame.font.init()
-            self.my_font = pygame.font.Font('./assets/fonts/montserrat.ttf', 30)
+            self.my_font = pygame.font.Font('./assets/fonts/montserrat.ttf', 36)
             self.bot_image = self.__loadImage('./assets/images/modes/bot.png')
+
+            self.text_displays = {
+                "current_player": (676,137),
+                "rejouer": (660,274),
+                "victoire": (680,230)
+            }
+
             self.bot_sizes = {
                 'x': 261,
                 'x_icn': 120,
@@ -85,6 +93,9 @@ class Core:
             self.close_image_rect = pygame.rect.Rect.move(self.close_image.get_rect(), self.close_sizes['pos_x'],
                                                           self.close_sizes['pos_y'])
 
+            self.replay_image = self.__loadImage('./assets/images/buttons/replay.png')
+            self.replay_image_rect = pygame.rect.Rect.move(pygame.transform.scale(self.replay_image, (471,172)).get_rect(), self.text_displays["rejouer"])
+
             self.index_pions = [(132,137),(285,137),(434,137),(132,291),(285,291),(434,291),(132,439),(285,439),(434,439),]
             self.player = -1
             self.players_pions = [pygame.transform.scale(self.__loadImage('./assets/images/players/circle.png'), (144, 144)),pygame.transform.scale(self.__loadImage('./assets/images/players/cross.png'), (144, 144))]
@@ -104,12 +115,8 @@ class Core:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # left clic
                         if self.game_status == 0: #Menu principal
-                            if self.bot_image_rect.collidepoint(event.pos): #bot mode
-                                self.__setBackgroundImage('./assets/images/game_screen.png')
-                                self.surf.blit(self.bot_image_icn,
-                                            (self.bot_sizes['pos_x_icn'], self.bot_sizes['pos_y_icn']))
-                                self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
-                                self.game_status = 1 # Démarrage de la partie en mode J1 Vs AI
+                            if self.bot_image_rect.collidepoint(event.pos) or self.online_image_rect.collidepoint(event.pos): # modes non disponibles pour le moment
+                                playsound('./assets/sounds/no.mp3')
 
                             if self.local_image_rect.collidepoint(event.pos): #local mode
                                 self.__setBackgroundImage('./assets/images/game_screen.png')
@@ -118,19 +125,10 @@ class Core:
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
                                 self.game_status = 2 # Démarrage de la partie en mode local
                                 self.plateau = pl.Plateau([0,0,0,0,0,0,0,0,0])
-                                self.current_player = self.my_font.render(f"Au tour de J{int(0.5*self.player+1.5)}", False, (0,0,0))
-                                self.surf_pions.blit(self.current_player, (0,0))
+                                self.__showTurn()
                                 self.__showPions()
 
-                            if self.online_image_rect.collidepoint(event.pos): #online mode
-                                self.__setBackgroundImage('./assets/images/game_screen.png')
-                                self.surf.blit(self.online_image_icn,
-                                            (self.online_sizes['pos_x_icn'], self.online_sizes['pos_y_icn']))
-                                self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
-                                self.game_status = 3 # Démarrage de la partie en mode J1 Vs J2
-
                         if self.game_status > 0: #Partie démarrée et "non-finie"
-                            print(event.pos)
                             if self.close_image_rect.collidepoint(event.pos): #return to index
                                 self.__showIndex()
                                 self.game_status = 0
@@ -140,18 +138,23 @@ class Core:
                                 if index >= 0:
                                     temp = self.plateau.add(index, self.player)
                                     if temp > 0:
-                                        print(f"Pion placé en index {index+1} par le joueur {self.player}")
-                                        self.player *= -1
-                                        self.current_player = self.my_font.render(f"Au tour de J{int(0.5*self.player+1.5)}", False, (0,0,0)) #  TODO: Attention, le texte passe au-dessus de l'ancien (trouver un moyen de l'effacer)
-                                        self.surf_pions.blit(self.current_player, (0,0))
+                                        self.surf_pions.fill((255,255,255),(self.text_displays["current_player"][0],self.text_displays["current_player"][1]-20,308,122))
                                         self.__showPions()
                                         if temp == 2:
                                             self.game_status = 4
-                                            print("VICTOIRE !!!")
+                                            newText = self.__createText(f"J{int(0.5*(self.player)+1.5)} remporte la victoire !")
+                                            self.surf_pions.blit(newText, self.text_displays["victoire"])
+                                            self.surf_pions.blit(self.__loadImage('./assets/images/buttons/replay.png'), self.text_displays["rejouer"])
+                                        else:
+                                            self.player *= -1
+                                            self.__showTurn()
+
                                     else:
-                                        print(f"Le pion placé en index {index+1} n'a pas pu être placé en {self.player}")
-
-
+                                        playsound('./assets/sounds/no.mp3')
+                            if self.game_status == 4:
+                                if self.replay_image_rect.collidepoint(event.pos):
+                                    self.game_status = 0
+                                    self.__showIndex()
             pygame.display.flip()
 
     def __showIndex(self):
@@ -194,9 +197,25 @@ class Core:
         """
         Description: Affiche les pions sur leur emplacement dans le plateau
         """
-        print(self.plateau.pions)
         pions = self.plateau.pions
         for i in range(0,len(pions)):
             if pions[i] != 0:
-                # print(f"Pion détecté en index {i+1}")
                 self.surf_pions.blit(self.players_pions[int(0.5*pions[i]+0.5)], self.index_pions[i])
+
+    def __createText(self, text, color=(0,0,0)):
+        """
+        Description: Créer un nouveau texte
+        :param text: Champ
+        :param color: Couleur choisie
+        :type text: String
+        :type color: Tuple
+        """
+        return self.my_font.render(text, False, color)
+
+    def __showTurn(self):
+        """
+        Description: Affiche les éléments
+        """
+        self.current_player = self.__createText(f"Au tour de J{int(0.5*self.player+1.5)}:")
+        self.surf_pions.blit(self.current_player, self.text_displays["current_player"])
+        self.surf_pions.blit(pygame.transform.scale(self.players_pions[int(0.5*self.player+0.5)], (71,71)), (910, 125))
