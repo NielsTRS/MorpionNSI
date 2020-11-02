@@ -1,5 +1,5 @@
 # coding: utf-8
-class Player():
+class Player:
     def __init__(self):
         self.victoires = 0
         self.defaites = 0

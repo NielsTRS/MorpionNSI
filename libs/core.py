@@ -1,8 +1,9 @@
 # coding: utf-8
 
+import libs.plateau as pl
 import pygame
 from playsound import playsound
-import libs.plateau as pl
+
 
 class Core:
     def __init__(self, x: int, y: int):
@@ -25,9 +26,9 @@ class Core:
             self.bot_image = self.__loadImage('./assets/images/modes/bot.png')
 
             self.text_displays = {
-                "current_player": (676,137),
-                "rejouer": (660,274),
-                "victoire": (680,230)
+                "current_player": (676, 137),
+                "rejouer": (660, 274),
+                "victoire": (680, 230)
             }
 
             self.bot_sizes = {
@@ -94,11 +95,15 @@ class Core:
                                                           self.close_sizes['pos_y'])
 
             self.replay_image = self.__loadImage('./assets/images/buttons/replay.png')
-            self.replay_image_rect = pygame.rect.Rect.move(pygame.transform.scale(self.replay_image, (471,172)).get_rect(), self.text_displays["rejouer"])
+            self.replay_image_rect = pygame.rect.Rect.move(
+                pygame.transform.scale(self.replay_image, (471, 172)).get_rect(), self.text_displays["rejouer"])
 
-            self.index_pions = [(132,137),(285,137),(434,137),(132,291),(285,291),(434,291),(132,439),(285,439),(434,439),]
+            self.index_pions = [(132, 137), (285, 137), (434, 137), (132, 291), (285, 291), (434, 291), (132, 439),
+                                (285, 439), (434, 439), ]
             self.player = -1
-            self.players_pions = [pygame.transform.scale(self.__loadImage('./assets/images/players/circle.png'), (144, 144)),pygame.transform.scale(self.__loadImage('./assets/images/players/cross.png'), (144, 144))]
+            self.players_pions = [
+                pygame.transform.scale(self.__loadImage('./assets/images/players/circle.png'), (144, 144)),
+                pygame.transform.scale(self.__loadImage('./assets/images/players/cross.png'), (144, 144))]
         else:
             raise TypeError("Les paramètres doivent être définis par des nombres")
 
@@ -114,37 +119,42 @@ class Core:
                     self.status = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # left clic
-                        if self.game_status == 0: #Menu principal
-                            if self.bot_image_rect.collidepoint(event.pos) or self.online_image_rect.collidepoint(event.pos): # modes non disponibles pour le moment
+                        if self.game_status == 0:  # Menu principal
+                            if self.bot_image_rect.collidepoint(event.pos) or self.online_image_rect.collidepoint(
+                                    event.pos):  # modes non disponibles pour le moment
                                 playsound('./assets/sounds/no.mp3')
 
-                            if self.local_image_rect.collidepoint(event.pos): #local mode
+                            if self.local_image_rect.collidepoint(event.pos):  # local mode
                                 self.__setBackgroundImage('./assets/images/game_screen.png')
                                 self.surf.blit(self.local_image_icn,
-                                            (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
+                                               (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
-                                self.game_status = 2 # Démarrage de la partie en mode local
-                                self.plateau = pl.Plateau([0,0,0,0,0,0,0,0,0])
+                                self.game_status = 2  # Démarrage de la partie en mode local
+                                self.plateau = pl.Plateau([0, 0, 0, 0, 0, 0, 0, 0, 0])
                                 self.__showTurn()
                                 self.__showPions()
 
-                        if self.game_status > 0: #Partie démarrée et "non-finie"
-                            if self.close_image_rect.collidepoint(event.pos): #return to index
+                        if self.game_status > 0:  # Partie démarrée et "non-finie"
+                            if self.close_image_rect.collidepoint(event.pos):  # return to index
                                 self.__showIndex()
                                 self.game_status = 0
-                            
+
                             if self.game_status < 4:
                                 index = self.__getIndex(event.pos)
                                 if index >= 0:
                                     temp = self.plateau.add(index, self.player)
                                     if temp > 0:
-                                        self.surf_pions.fill((255,255,255),(self.text_displays["current_player"][0],self.text_displays["current_player"][1]-20,308,122))
+                                        self.surf_pions.fill((255, 255, 255), (self.text_displays["current_player"][0],
+                                                                               self.text_displays["current_player"][
+                                                                                   1] - 20, 308, 122))
                                         self.__showPions()
                                         if temp == 2:
                                             self.game_status = 4
-                                            newText = self.__createText(f"J{int(0.5*(self.player)+1.5)} remporte la victoire !")
+                                            newText = self.__createText(
+                                                f"J{int(0.5 * (self.player) + 1.5)} remporte la victoire !")
                                             self.surf_pions.blit(newText, self.text_displays["victoire"])
-                                            self.surf_pions.blit(self.__loadImage('./assets/images/buttons/replay.png'), self.text_displays["rejouer"])
+                                            self.surf_pions.blit(self.__loadImage('./assets/images/buttons/replay.png'),
+                                                                 self.text_displays["rejouer"])
                                         else:
                                             self.player *= -1
                                             self.__showTurn()
@@ -188,8 +198,9 @@ class Core:
     def __getIndex(self, pos):
         x = pos[0]
         y = pos[1]
-        for i in range(0,len(self.index_pions)):
-            if self.index_pions[i][0] <= x <= self.index_pions[i][0]+144 and self.index_pions[i][1] <= y <= self.index_pions[i][1]+144:
+        for i in range(0, len(self.index_pions)):
+            if self.index_pions[i][0] <= x <= self.index_pions[i][0] + 144 and self.index_pions[i][1] <= y <= \
+                    self.index_pions[i][1] + 144:
                 return i
         return -1
 
@@ -198,11 +209,11 @@ class Core:
         Description: Affiche les pions sur leur emplacement dans le plateau
         """
         pions = self.plateau.pions
-        for i in range(0,len(pions)):
+        for i in range(0, len(pions)):
             if pions[i] != 0:
-                self.surf_pions.blit(self.players_pions[int(0.5*pions[i]+0.5)], self.index_pions[i])
+                self.surf_pions.blit(self.players_pions[int(0.5 * pions[i] + 0.5)], self.index_pions[i])
 
-    def __createText(self, text, color=(0,0,0)):
+    def __createText(self, text, color=(0, 0, 0)):
         """
         Description: Créer un nouveau texte
         :param text: Champ
@@ -216,6 +227,7 @@ class Core:
         """
         Description: Affiche les éléments
         """
-        self.current_player = self.__createText(f"Au tour de J{int(0.5*self.player+1.5)}:")
+        self.current_player = self.__createText(f"Au tour de J{int(0.5 * self.player + 1.5)}:")
         self.surf_pions.blit(self.current_player, self.text_displays["current_player"])
-        self.surf_pions.blit(pygame.transform.scale(self.players_pions[int(0.5*self.player+0.5)], (71,71)), (910, 125))
+        self.surf_pions.blit(pygame.transform.scale(self.players_pions[int(0.5 * self.player + 0.5)], (71, 71)),
+                             (910, 125))
