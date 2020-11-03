@@ -1,4 +1,4 @@
-class Plateau:
+class Board:
     def __init__(self, pions=None):
         """
         Fonction init
@@ -7,7 +7,7 @@ class Plateau:
         if pions is None:
             pions = []
         self.fill(pions)
-        self.coups = 0
+        self.turn = 0
 
     def add(self, i: int, player: int):
         """
@@ -24,8 +24,8 @@ class Plateau:
             return 0
         else:
             self.pions[i] = player
-            self.coups += 1
-            if self.coups > 4 and self.check_win(i, player):
+            self.turn += 1
+            if self.turn > 4 and self.check_win(i, player):
                 return 2
             return 1
 
@@ -35,7 +35,6 @@ class Plateau:
         :param player: Le joueur qui a remporté cette manche (1 pour J1 et -1 pour J2)
         :type player: int
         """
-        # TODO
         print(f"Le joueur {player} a gagné !")
 
     def fill(self, pions=None):

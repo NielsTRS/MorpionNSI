@@ -1,6 +1,6 @@
 # coding: utf-8
 
-import libs.plateau as pl
+import libs.board as pl
 import pygame
 from playsound import playsound
 
@@ -144,7 +144,7 @@ class Core:
                                                (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
                                 self.game_status = 2  # Démarrage de la partie en mode local
-                                self.plateau = pl.Plateau([0, 0, 0, 0, 0, 0, 0, 0, 0])
+                                self.board = pl.Board([0, 0, 0, 0, 0, 0, 0, 0, 0])
                                 self.__showTurn()
                                 self.__showPions()
 
@@ -156,7 +156,7 @@ class Core:
                             if self.game_status < 4:
                                 index = self.__getIndex(event.pos)
                                 if index >= 0:
-                                    temp = self.plateau.add(index, self.player)
+                                    temp = self.board.add(index, self.player)
                                     if temp > 0:
                                         self.surf_pions.fill((255, 255, 255), (self.text_displays["current_player"][0],
                                                                                self.text_displays["current_player"][
@@ -227,7 +227,7 @@ class Core:
         """
         Affiche les pions sur leur emplacement dans le plateau
         """
-        pions = self.plateau.pions
+        pions = self.board.pions
         for i in range(0, len(pions)):
             if pions[i] != 0:
                 self.surf_pions.blit(self.players_pions[int(0.5 * pions[i] + 0.5)], self.index_pions[i])
