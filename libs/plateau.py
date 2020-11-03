@@ -1,9 +1,11 @@
 class Plateau():
-    def __init__(self, pions=[]):
+    def __init__(self, pions=None):
         """
         Fonction init
         :param pions:
         """
+        if pions is None:
+            pions = []
         self.fill(pions)
         self.coups = 0
 
@@ -19,7 +21,6 @@ class Plateau():
             raise ValueError(
                 f"{i} n'est pas une valeur valide (essayez avec un entier entre 0 et {len(self.pions) - 1})")
         if self.pions[i] != 0:
-            # raise ValueError(f"La case {i} est déjà occupée.")
             return 0
         else:
             self.pions[i] = player
@@ -37,12 +38,14 @@ class Plateau():
         # TODO
         print(f"Le joueur {player} a gagné !")
 
-    def fill(self, pions=[]):
+    def fill(self, pions=None):
         """
         Rempli le plateau avec des cases vides ou prédéfinies
         :param pions: Liste des cases prédéfinies (laissez vide pour remplir normalement)
         :type pions: array
         """
+        if pions is None:
+            pions = []
         self.pions = [0 for i in range(0, 9)] if len(pions) == 0 else pions
 
     def reset(self):
@@ -69,6 +72,7 @@ class Plateau():
             l = 3
         if self.pions[(3 * l - 3)] == player and self.pions[3 * l - 2] == player and self.pions[3 * l - 1] == player:
             return True
+
         # Victoire par Colonne
         if i == 0 or i == 3 or i == 6:
             c = 1
@@ -78,6 +82,7 @@ class Plateau():
             c = 3
         if self.pions[c * 1 - 1] == player and self.pions[c * 1 + 2] == player and self.pions[c * 1 + 5] == player:
             return True
+
         # Victoire par Diagonale
         try:
             [0, 2, 4, 6, 8].index(i)  # On vérifie si le pion posé se trouve sur les coins ou au centre.
