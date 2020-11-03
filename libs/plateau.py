@@ -1,4 +1,4 @@
-class Plateau():
+class Plateau:
     def __init__(self, pions=None):
         """
         Fonction init

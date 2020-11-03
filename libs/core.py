@@ -24,7 +24,6 @@ class Core:
             # variables de jeu
             self.game_status = 0
             self.status = True
-            self.plateau = pl.Plateau([0, 0, 0, 0, 0, 0, 0, 0, 0])
 
             # variables de surface
             self.surf = pygame.display.set_mode((self.x, self.y))
@@ -145,6 +144,7 @@ class Core:
                                                (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
                                 self.surf.blit(self.close_image, (self.close_sizes['pos_x'], self.close_sizes['pos_y']))
                                 self.game_status = 2  # Démarrage de la partie en mode local
+                                self.plateau = pl.Plateau([0, 0, 0, 0, 0, 0, 0, 0, 0])
                                 self.__showTurn()
                                 self.__showPions()
 
