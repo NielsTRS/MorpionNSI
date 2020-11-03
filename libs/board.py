@@ -1,3 +1,5 @@
+# coding: utf-8
+
 class Board:
     def __init__(self, pions=None):
         """
