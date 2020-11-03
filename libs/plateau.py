@@ -1,11 +1,15 @@
 class Plateau():
     def __init__(self, pions=[]):
+        """
+        Fonction init
+        :param pions:
+        """
         self.fill(pions)
         self.coups = 0
 
     def add(self, i: int, player: int):
         """
-        Description: rajoute un pion à la case "i" souhaitée pour le joueur "player"
+        Rajoute un pion à la case "i" souhaitée pour le joueur "player"
         :param i: Index de la case compris entre 0 et 8 inclus
         :type i: int 
         :param player: Numéro du joueur (1 pour J1 et -1 pour J2)
@@ -26,7 +30,7 @@ class Plateau():
 
     def win(self, player):
         """
-        Description: exécute le code final lorsqu'une victoire est testée !
+        Exécute le code final lorsqu'une victoire est testée !
         :param player: Le joueur qui a remporté cette manche (1 pour J1 et -1 pour J2)
         :type player: int
         """
@@ -35,7 +39,7 @@ class Plateau():
 
     def fill(self, pions=[]):
         """
-        Description: rempli le plateau avec des cases vides ou prédéfinies
+        Rempli le plateau avec des cases vides ou prédéfinies
         :param pions: Liste des cases prédéfinies (laissez vide pour remplir normalement)
         :type pions: array
         """
@@ -43,14 +47,14 @@ class Plateau():
 
     def reset(self):
         """
-        Description: vide et rempli le plateau
+        Vide et rempli le plateau
         """
         self.fill()
         self.pions = [0 for i in range(0, 9)]
 
     def check_win(self, i, player):
         """
-        Description: vérifie les condition d'une victoire
+        Vérifie les condition d'une victoire
         :param i: Case à vérifier (entre 0 et 8 inclus)
         :type i: int
         :param player: Le dernier joueur à avoir joué.
@@ -88,7 +92,7 @@ class Plateau():
 
     def __str__(self):
         """
-        Description: affichage du plateau dans la console via un print
+        Affichage du plateau dans la console via un print
         """
         text = ""
         for i in range(0, 3):

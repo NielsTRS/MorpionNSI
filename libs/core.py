@@ -8,29 +8,45 @@ from playsound import playsound
 class Core:
     def __init__(self, x: int, y: int):
         """
-        Init function to setup the game
+        Fonction init
         :param x: Taille de la fenêtre en longeur
         :param y: Taille de la fenêtre en largeur
         :type x: int
         :type y: int
         """
         if isinstance(x, int) and isinstance(y, int):
+            pygame.font.init()
+
+            # taille de la fenêtre
             self.x = x
             self.y = y
+
+            # variables de jeu
             self.game_status = 0
             self.status = True
+
+            # variables de surface
             self.surf = pygame.display.set_mode((self.x, self.y))
             self.surf_pions = pygame.display.set_mode((self.x, self.y))
-            pygame.font.init()
-            self.my_font = pygame.font.Font('./assets/fonts/montserrat.ttf', 36)
-            self.bot_image = self.__loadImage('./assets/images/modes/bot.png')
+            self.index_pions = [(132, 137), (285, 137), (434, 137), (132, 291), (285, 291), (434, 291), (132, 439),
+                                (285, 439), (434, 439), ]
 
+            # variables des joueurs
+            self.player = -1
+            self.players_pions = [
+                pygame.transform.scale(self.__loadImage('./assets/images/players/circle.png'), (144, 144)),
+                pygame.transform.scale(self.__loadImage('./assets/images/players/cross.png'), (144, 144))]
+
+            # variables de font
+            self.my_font = pygame.font.Font('./assets/fonts/montserrat.ttf', 36)
             self.text_displays = {
                 "current_player": (676, 137),
                 "rejouer": (660, 274),
                 "victoire": (680, 230)
             }
 
+            # variables pour l'image du jeu contre un bot
+            self.bot_image = self.__loadImage('./assets/images/modes/bot.png')
             self.bot_sizes = {
                 'x': 261,
                 'x_icn': 120,
@@ -47,6 +63,7 @@ class Core:
             self.bot_image_rect = pygame.rect.Rect.move(self.bot_image.get_rect(), self.bot_sizes['pos_x'],
                                                         self.bot_sizes['pos_y'])
 
+            # variables pour l'image du jeu en local
             self.local_image = self.__loadImage('./assets/images/modes/local.png')
             self.local_sizes = {
                 'x': 261,
@@ -64,6 +81,7 @@ class Core:
             self.local_image_rect = pygame.rect.Rect.move(self.local_image.get_rect(), self.local_sizes['pos_x'],
                                                           self.local_sizes['pos_y'])
 
+            # variables pour l'image du jeu en ligne
             self.online_image = self.__loadImage('./assets/images/modes/online.png')
             self.online_sizes = {
                 'x': 261,
@@ -83,6 +101,7 @@ class Core:
             self.online_image_rect = pygame.rect.Rect.move(self.online_image.get_rect(), self.online_sizes['pos_x'],
                                                            self.online_sizes['pos_y'])
 
+            # variables pour l'image de croix afin de terminer le jeu
             self.close_image = self.__loadImage('./assets/images/buttons/quit.png')
             self.close_sizes = {
                 'x': 58,
@@ -94,22 +113,17 @@ class Core:
             self.close_image_rect = pygame.rect.Rect.move(self.close_image.get_rect(), self.close_sizes['pos_x'],
                                                           self.close_sizes['pos_y'])
 
+            # variables pour l'image de boucle afin de recommencer le jeu
             self.replay_image = self.__loadImage('./assets/images/buttons/replay.png')
             self.replay_image_rect = pygame.rect.Rect.move(
                 pygame.transform.scale(self.replay_image, (471, 172)).get_rect(), self.text_displays["rejouer"])
 
-            self.index_pions = [(132, 137), (285, 137), (434, 137), (132, 291), (285, 291), (434, 291), (132, 439),
-                                (285, 439), (434, 439), ]
-            self.player = -1
-            self.players_pions = [
-                pygame.transform.scale(self.__loadImage('./assets/images/players/circle.png'), (144, 144)),
-                pygame.transform.scale(self.__loadImage('./assets/images/players/cross.png'), (144, 144))]
         else:
             raise TypeError("Les paramètres doivent être définis par des nombres")
 
     def start(self):
         """
-        Main function to start the game
+        Fonction afin de lancer le jeu
         :return:
         """
         self.__showIndex()
@@ -118,13 +132,13 @@ class Core:
                 if event.type == pygame.QUIT:
                     self.status = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:  # left clic
+                    if event.button == 1:  # clic gauche
                         if self.game_status == 0:  # Menu principal
                             if self.bot_image_rect.collidepoint(event.pos) or self.online_image_rect.collidepoint(
                                     event.pos):  # modes non disponibles pour le moment
                                 playsound('./assets/sounds/no.mp3')
 
-                            if self.local_image_rect.collidepoint(event.pos):  # local mode
+                            if self.local_image_rect.collidepoint(event.pos):  # mode local
                                 self.__setBackgroundImage('./assets/images/game_screen.png')
                                 self.surf.blit(self.local_image_icn,
                                                (self.local_sizes['pos_x_icn'], self.local_sizes['pos_y_icn']))
@@ -135,7 +149,7 @@ class Core:
                                 self.__showPions()
 
                         if self.game_status > 0:  # Partie démarrée et "non-finie"
-                            if self.close_image_rect.collidepoint(event.pos):  # return to index
+                            if self.close_image_rect.collidepoint(event.pos):  # retourne à l'accueil
                                 self.__showIndex()
                                 self.game_status = 0
 
@@ -150,9 +164,9 @@ class Core:
                                         self.__showPions()
                                         if temp == 2:
                                             self.game_status = 4
-                                            newText = self.__createText(
+                                            new_text = self.__createText(
                                                 f"J{int(0.5 * (self.player) + 1.5)} remporte la victoire !")
-                                            self.surf_pions.blit(newText, self.text_displays["victoire"])
+                                            self.surf_pions.blit(new_text, self.text_displays["victoire"])
                                             self.surf_pions.blit(self.__loadImage('./assets/images/buttons/replay.png'),
                                                                  self.text_displays["rejouer"])
                                         else:
@@ -169,7 +183,7 @@ class Core:
 
     def __showIndex(self):
         """
-        Private function to show the index window
+        Fonction privée pour montrer la page d'accueil
         :return:
         """
         self.__setBackgroundImage('./assets/images/main_menu.png')
@@ -179,7 +193,7 @@ class Core:
 
     def __loadImage(self, image: str):
         """
-        Private function to load an image
+        Fonction privée pour charger une image
         :param image: link of the image
         :type image: str
         :return:
@@ -188,7 +202,7 @@ class Core:
 
     def __setBackgroundImage(self, image: str):
         """
-        Show the image in background
+        Fonction privée pour charger une image en fond
         :param image: link of the image
         :type image: str
         :return:
@@ -196,6 +210,11 @@ class Core:
         self.surf.blit(self.__loadImage(image), (0, 0))
 
     def __getIndex(self, pos):
+        """
+        Retourne les indices
+        :param pos:
+        :return:
+        """
         x = pos[0]
         y = pos[1]
         for i in range(0, len(self.index_pions)):
@@ -206,7 +225,7 @@ class Core:
 
     def __showPions(self):
         """
-        Description: Affiche les pions sur leur emplacement dans le plateau
+        Affiche les pions sur leur emplacement dans le plateau
         """
         pions = self.plateau.pions
         for i in range(0, len(pions)):
@@ -215,7 +234,7 @@ class Core:
 
     def __createText(self, text, color=(0, 0, 0)):
         """
-        Description: Créer un nouveau texte
+        Créer un nouveau texte
         :param text: Champ
         :param color: Couleur choisie
         :type text: String
@@ -225,7 +244,8 @@ class Core:
 
     def __showTurn(self):
         """
-        Description: Affiche les éléments
+        Affiche les éléments
+        :return:
         """
         self.current_player = self.__createText(f"Au tour de J{int(0.5 * self.player + 1.5)}:")
         self.surf_pions.blit(self.current_player, self.text_displays["current_player"])

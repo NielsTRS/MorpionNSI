@@ -2,5 +2,5 @@
 
 import libs.core as core
 
-game = core.Core(1280, 720)  # load the game
-game.start()  # start the game
+game = core.Core(1280, 720)  # charge le jeu
+game.start()  # lance le jeu
